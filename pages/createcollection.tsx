@@ -41,121 +41,41 @@ const CreateCollection = () => {
 
   return (
     <div>
-      {sucessMessage && (
-        <div className="notification is-success is-justify-content-center is-flex">
-          <button
-            className="delete"
-            onClick={() => setSucessMessage(false)}
-          ></button>
-          <p className="title is-4">Success! 🎉🎉🎉</p>
-        </div>
-      )}
-      <div className="mt-6" style={{ marginBottom: "13rem" }}>
-        <div className="columns ">
-          <div className="column is-6 is-offset-3">
-            <div className="title is-2">Create new Collection</div>
-            <p
-              className="help"
-              style={{
-                fontSize: "xx-small",
-                position: "relative",
-                bottom: "12px",
-              }}
-            >
-              <span style={{ color: "red" }}>*</span> Required fields{" "}
-            </p>
-            <br />
-
-            <br />
-            <div className="field">
-              <label className="label">
-                Collection Name <span style={{ color: "red" }}>*</span>
-              </label>
-              <div className="control">
-                <input
-                  className="input"
-                  type="text"
-                  placeholder="Crypto something..."
-                  onChange={(e) =>
-                    updateFormInput({ ...formInput, name: e.target.value })
-                  }
-                />
-              </div>
-            </div>
-            <br />
-            <div className="field">
-              <label className="label">Description</label>
-              <div className="control">
-                <textarea
-                  className="textarea"
-                  placeholder="What's the history of your NFT"
-                  onChange={(e) =>
-                    updateFormInput({
-                      ...formInput,
-                      description: e.target.value,
-                    })
-                  }
-                ></textarea>
-              </div>
-            </div>
-            <br />
-            <label className="label">Collection logo </label>
-            {imgUrl && (
-              <img className="rounded mt-4" width="350" src={imgUrl} />
-            )}
-            <div className="file is-boxed">
-              <label className="file-label">
-                <input
-                  className="file-input"
-                  type="file"
-                  name="resume"
-                  onChange={onChange}
-                />
-                <span className="file-cta">
-                  <span className="file-icon">
-                    <i className="fas fa-upload"></i>
-                  </span>
-                  <span className="file-label">Choose a file…</span>
-                </span>
-              </label>
-            </div>
-
-            <br />
-            <br />
-            <div className="field is-grouped">
-              <div className="control">
-                <button
-                  className="button is-primary is-large"
-                  onClick={submitCollection}
-                >
-                  Create
-                </button>
-              </div>
-              <br />
-              <br />
+      <div className="mx-auto mt-10 w-11/12 bg-slate-100 rounded-xl">
+        <div className="p-8 pl-14">
+          <p className="text-2xl font-bold my-4">Create New Collection</p>
+          <label className="label">Collection Name</label>
+          <div className="">
+            <input
+              className="rounded pl-1"
+              type="text"
+              placeholder="Crypto something..."
+              onChange={(e) =>
+                updateFormInput({ ...formInput, name: e.target.value })
+              }
+            />
+          </div>
+          <div className="mt-4">
+            <label className="">Description</label>
+            <div className="">
+              <input
+                className="pl-1 rounded"
+                placeholder="Cute kitten"
+                onChange={(e) =>
+                  updateFormInput({
+                    ...formInput,
+                    description: e.target.value,
+                  })
+                }
+              ></input>
             </div>
           </div>
-          <br />
-          <br />
-        </div>
-        <div className={`modal ${modalValue}`} id="modal-list">
-          <div className="modal-background"></div>
-          <div
-            className="is-flex is-justify-content-center modal-content"
-            style={{ textAlign: "center", background: "white" }}
+          <button
+            className="mt-4 bg-slate-200 rounded-lg p-2 hover:drop-shadow"
+            onClick={submitCollection}
           >
-            <div>
-              <a className="button mt-6 is-large is-loading is-ghost"></a>
-              <p className="title is-4 mb-6">
-                Processing, do not refresh the page.
-              </p>
-            </div>
-          </div>
-          <button
-            className="modal-close is-large"
-            aria-label="close"
-            onClick={() => setModalValue("")}
-          ></button>
+            Create
+          </button>
         </div>
       </div>
     </div>

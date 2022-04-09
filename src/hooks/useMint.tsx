@@ -59,25 +59,25 @@ function useCreateCollection(): [uploadFile, create] {
     };
 
     const tokenHash: any = await Moralis.executeFunction(mint);
-    console.log(mint);
+
+    if (tokenHash) {
+      const s3Bucket = "kittie-kat-rescue"; // replace with your bucket name
+      const objectType = "application/json"; // type of file
+      const data = JSON.stringify({ name, description, image: imgUrl });
+      const tokenIdString = tokenId.toString().padStart(64, "0");
+      // setup params for putObject
+      const params = {
+        Bucket: s3Bucket,
+        ACL: "public-read",
+        Key: collectionName + "/" + tokenIdString + ".json",
+        Body: data,
+      };
+      const result = s3.putObject(params, (err) => {
+        console.log(err);
+      });
+      console.log(result);
+    }
     await tokenHash.wait();
-
-    const s3Bucket = "kittie-kat-rescue"; // replace with your bucket name
-    const objectType = "application/json"; // type of file
-    const data = JSON.stringify({ name, description, image: imgUrl });
-    const tokenIdString = tokenId.toString().padStart(64, "0");
-    // setup params for putObject
-    const params = {
-      Bucket: s3Bucket,
-      ACL: "public-read",
-      Key: collectionName + "/" + tokenIdString + ".json",
-      Body: data,
-    };
-    console.log(s3);
-    const result = s3.putObject(params, (err) => {
-      console.log(err);
-    });
-
     setModalValue("");
     success();
     return true;

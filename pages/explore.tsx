@@ -4,6 +4,8 @@ import { useMoralis } from "react-moralis";
 import Moralis from "moralis/types";
 import useFetchCollection from "../src/hooks/useFetchCollection";
 import useBuyNFT from "../src/hooks/useBuyNFT";
+import NFTTile from "../src/components/NFTTile";
+import { useQuery } from "react-query";
 
 interface marketItms {
   collectionAddress: string;
@@ -19,37 +21,36 @@ interface metadata {
   description: string;
   id: string;
   image: string;
-  marketId: number;
+  marketId?: number;
   name: string;
-  price: string;
-  collectionAddress: string;
+  price?: string;
+  address: string;
 }
-type props = {
-  marketId: number;
-  price: string;
-};
-function explore() {
+
+function Explore() {
   const [fetchItems, filterItems] = useFetchMarket();
   const { isWeb3Enabled } = useMoralis();
   const [collectionList, setCollectionList] = useState<
     Moralis.Object<Moralis.Attributes>[]
   >([]);
-  const [collection, setCollection] =
-    useState<Moralis.Object<Moralis.Attributes>>();
   const [, fetchAll] = useFetchCollection();
   const [marketItms, setMarketItms] = useState<marketItms[]>();
   const [metadata, setMetadata] = useState<metadata[]>();
-  const [filtered_marketItms, setfiltered_MarketItms] =
-    useState<marketItms[]>();
   const [filtered_metadata, setfiltered_Metadata] = useState<metadata[]>();
   const buy = useBuyNFT();
-
+  const { isLoading } = useQuery("collection", {
+    enabled: isWeb3Enabled,
+    refetchOnWindowFocus: false,
+  });
   useEffect(() => {
     getItems();
-    getCollections();
   }, [isWeb3Enabled]);
 
+  useEffect(() => {
+    getCollections();
+  }, [isLoading]);
   const getCollections = async () => {
+    if (!isWeb3Enabled) return;
     const [_collections] = await fetchAll();
     if (!_collections) return;
     setCollectionList(_collections);
@@ -59,22 +60,19 @@ function explore() {
     const collectionName = e.target.value;
     console.log(collectionName);
     if (collectionName === "All Collections") {
-      setCollection(undefined);
+      setfiltered_Metadata(metadata);
       return;
     }
     if (!marketItms || !metadata) return;
-    const selectedCollection = collectionList.filter((item) => {
-      return item.get("name") === collectionName;
-    });
     const [_marketItms, _metadata] = filterItems(
-      selectedCollection[0].get("collectionAddress"),
+      collectionName,
       marketItms,
       metadata
     );
     setfiltered_Metadata(_metadata);
-    setfiltered_MarketItms(_marketItms);
   }
   const getItems = async () => {
+    if (!isWeb3Enabled) return;
     const answer = await fetchItems();
     if (!answer) return;
     const [_marketItms, _metadata] = answer;
@@ -82,7 +80,7 @@ function explore() {
     setMetadata(_metadata);
     setfiltered_Metadata(_metadata);
   };
-  async function handleBuy(nftToBuy: props) {
+  async function handleBuy(nftToBuy: metadata) {
     const callback = () => {
       console.log("all righ!");
     };
@@ -90,49 +88,41 @@ function explore() {
   }
 
   return (
-    <div>
-      explore
-      <select
-        onChange={(e) => {
-          picklistChange(e);
-        }}
-      >
-        <option>All Collections</option>
-        {collectionList.map((collection, i) => (
-          <option key={i}>{collection.get("name")}</option>
-        ))}
-      </select>
-      <div>
-        {filtered_metadata &&
-          filtered_metadata.map((nft, i) => (
-            <div key={i} className="column  is-one-third">
-              <div className="tile is-parent">
-                <div className="card tile is-child box">
-                  <div className="card-image">
-                    <figure className="image is-4by3">
-                      <img src={nft.image} alt="Placeholder image" />
-                    </figure>
-                  </div>
-                  <div>
-                    <div className="title is-4">{nft.name}</div>
-                    <p>Price: {nft.price} Matic</p>
-                    <button
-                      className="button"
-                      onClick={() => {
-                        handleBuy(nft);
-                      }}
-                    >
-                      {" "}
-                      Buy{" "}
-                    </button>
-                  </div>
-                </div>
-              </div>
-            </div>
+    <div className="pb-16">
+      <p className="text-6xl  font-bold text-center py-14">
+        Explore Collections
+      </p>
+      <div className="flex mt-4 bg-black w-8/12 mb-8 mx-auto border border-secondary rounded overflow-hidden">
+        <span className="text-sm text-white  px-4 py-2 bg-secondary whitespace-no-wrap">
+          Collection:
+        </span>
+        <select
+          className=" py-2 w-full  bg-white"
+          onChange={(e) => {
+            picklistChange(e);
+          }}
+        >
+          <option>All Collections</option>
+          {collectionList.map((collection, i) => (
+            <option key={i} value={collection.get("collectionAddress")}>
+              {collection.get("name")}
+            </option>
           ))}
+        </select>
+      </div>
+      <hr />
+      <div className="md:flex justify-center">
+        <div className="px-4" style={{ maxWidth: "1600px" }}>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 pt-4">
+            {filtered_metadata &&
+              filtered_metadata.map((nft, i) => (
+                <NFTTile key={i} nft={nft} callback={handleBuy} button="Buy" />
+              ))}
+          </div>
+        </div>
       </div>
     </div>
   );
 }
 
-export default explore;
+export default Explore;
