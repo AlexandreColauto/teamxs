@@ -6,6 +6,10 @@ import useFetchCollection from "../src/hooks/useFetchCollection";
 import useBuyNFT from "../src/hooks/useBuyNFT";
 import NFTTile from "../src/components/NFTTile";
 import { useQuery } from "react-query";
+import Link from "next/link";
+import ToastSucess from "../src/components/ToastSucess";
+import ToastError from "../src/components/ToastError";
+import Processing from "../src/components/Processing";
 
 interface marketItms {
   collectionAddress: string;
@@ -37,11 +41,17 @@ function Explore() {
   const [marketItms, setMarketItms] = useState<marketItms[]>();
   const [metadata, setMetadata] = useState<metadata[]>();
   const [filtered_metadata, setfiltered_Metadata] = useState<metadata[]>();
+  const [empty, setEmpty] = useState(false);
+  const [isSuccess, setIsSuccess] = useState(false);
+  const [isError, setisError] = useState(false);
+  const [processing, setProcessing] = useState(false);
+
   const buy = useBuyNFT();
   const { isLoading } = useQuery("collection", {
     enabled: isWeb3Enabled,
     refetchOnWindowFocus: false,
   });
+
   useEffect(() => {
     getItems();
   }, [isWeb3Enabled]);
@@ -49,6 +59,7 @@ function Explore() {
   useEffect(() => {
     getCollections();
   }, [isLoading]);
+
   const getCollections = async () => {
     if (!isWeb3Enabled) return;
     const [_collections] = await fetchAll();
@@ -74,6 +85,8 @@ function Explore() {
   const getItems = async () => {
     if (!isWeb3Enabled) return;
     const answer = await fetchItems();
+    setEmpty(!answer?.length);
+
     if (!answer) return;
     const [_marketItms, _metadata] = answer;
     setMarketItms(_marketItms);
@@ -81,10 +94,16 @@ function Explore() {
     setfiltered_Metadata(_metadata);
   };
   async function handleBuy(nftToBuy: metadata) {
+    setProcessing(true);
     const callback = () => {
-      console.log("all righ!");
+      setProcessing(false);
+      setIsSuccess(true);
     };
-    await buy({ ...nftToBuy, callback });
+    const errCallback = () => {
+      setProcessing(false);
+      setisError(true);
+    };
+    await buy({ ...nftToBuy, callback, errCallback });
   }
 
   return (
@@ -111,16 +130,36 @@ function Explore() {
         </select>
       </div>
       <hr />
-      <div className="md:flex justify-center">
-        <div className="px-4" style={{ maxWidth: "1600px" }}>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 pt-4">
-            {filtered_metadata &&
-              filtered_metadata.map((nft, i) => (
-                <NFTTile key={i} nft={nft} callback={handleBuy} button="Buy" />
-              ))}
+      {empty ? (
+        <div className="flex mx-auto justify-content-center mt-8">
+          <div className="mx-auto text-center">
+            <p className="text-4xl font-bold">
+              {" "}
+              There&apos;s currently no NFT on the Marketplace, come back later.
+            </p>
           </div>
         </div>
-      </div>
+      ) : (
+        <div className="md:flex justify-center">
+          <div className="px-4" style={{ maxWidth: "1600px" }}>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 pt-4">
+              {filtered_metadata &&
+                filtered_metadata.map((nft, i) => (
+                  <NFTTile
+                    key={i}
+                    nft={nft}
+                    callback={handleBuy}
+                    button="Buy"
+                  />
+                ))}
+            </div>
+          </div>
+        </div>
+      )}
+      <Processing isOpen={processing} />
+
+      {isSuccess && <ToastSucess isOpen={true} toggle={setIsSuccess} />}
+      {isError && <ToastError isOpen={true} toggle={setisError} />}
     </div>
   );
 }

@@ -5,6 +5,7 @@ type props = {
   marketId?: number;
   price?: string;
   callback: () => void;
+  errCallback: () => void;
 };
 
 const BuyNFT = () => {
@@ -15,22 +16,26 @@ const BuyNFT = () => {
     const userAddress = await Moralis.account;
     if (!marketAddress || !userAddress || !props.price) return;
 
-    const { marketId, price, callback } = props;
+    const { marketId, price, callback, errCallback } = props;
+    try {
+      const listItem = {
+        contractAddress: marketAddress,
+        functionName: "performATransaction",
+        abi: NFTMarket.abi,
+        params: {
+          itemId: marketId,
+        },
+        msgValue: Moralis.Units.ETH(price),
+      };
+      const listTransaction: any = await Moralis.executeFunction(listItem);
+      await listTransaction.wait();
 
-    const listItem = {
-      contractAddress: marketAddress,
-      functionName: "performATransaction",
-      abi: NFTMarket.abi,
-      params: {
-        itemId: marketId,
-      },
-      msgValue: Moralis.Units.ETH(price),
-    };
-    const listTransaction: any = await Moralis.executeFunction(listItem);
-    await listTransaction.wait();
-
-    console.log("all right!");
-    callback();
+      console.log("all right!");
+      callback();
+    } catch (err) {
+      console.log(err);
+      errCallback();
+    }
   };
 
   return buy;

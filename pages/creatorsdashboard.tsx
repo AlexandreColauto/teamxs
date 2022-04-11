@@ -8,6 +8,8 @@ import Moralis from "moralis";
 import Disclosure from "../src/components/Disclosure";
 import NFTTile from "../src/components/NFTTile";
 import { useQuery } from "react-query";
+import ToastError from "../src/components/ToastError";
+import ToastSucess from "../src/components/ToastSucess";
 
 function CreatorsDashboard() {
   const { isWeb3Enabled, user } = useMoralis();
@@ -17,6 +19,8 @@ function CreatorsDashboard() {
   const [filteredNFTs, setFilteredNFTs] = useState<metadata[]>();
   const [allCollections, setAllCollections] = useState<boolean>();
   const [empty, setEmpty] = useState(false);
+  const [isSuccess, setIsSuccess] = useState(false);
+  const [isError, setisError] = useState(false);
   const [collectionList, setCollectionList] = useState<
     Moralis.Object<Moralis.Attributes>[]
   >([]);
@@ -37,14 +41,24 @@ function CreatorsDashboard() {
 
   const executeFectchNFTs = async () => {
     if (!isWeb3Enabled && !isLoading) return;
-    const [_metadata, _collectionList, loading] = await fetchNFTs();
-    setEmpty(!_metadata?.length);
-    setUserNFTsMetada(_metadata);
-    setFilteredNFTs(_metadata);
-    console.log(_metadata);
-    if (!_collectionList) return;
-    setCollectionList(_collectionList);
-    setAllCollections(true);
+    try {
+      const [_metadata, _collectionList, loading] = await fetchNFTs();
+      setEmpty(!_metadata?.length);
+      setUserNFTsMetada(_metadata);
+      setFilteredNFTs(_metadata);
+      console.log(_metadata);
+      if (!_collectionList) return;
+      setCollectionList(_collectionList);
+      setAllCollections(true);
+    } catch (err) {
+      console.log(err);
+      if (!isError) {
+        setisError(true);
+        setTimeout(function () {
+          setisError(false);
+        }, 5000);
+      }
+    }
   };
 
   const listNFT = async (nft: metadata) => {
@@ -68,10 +82,10 @@ function CreatorsDashboard() {
     setAllCollections(false);
     setFilteredNFTs(_metadata);
   }
-
-  const noNFTS = () => {
-    setEmpty(true);
+  const callback = () => {
+    toggleModal();
   };
+
   return (
     <div className="pb-24">
       {empty ? (
@@ -95,8 +109,10 @@ function CreatorsDashboard() {
           {modalOpen && nftToList && (
             <ModalListNFT
               isOpen={true}
-              toggle={toggleModal}
+              toggle={callback}
               NFTToList={nftToList}
+              setSuccessMessage={setIsSuccess}
+              setErrorMessage={setisError}
             />
           )}
           <p className="text-5xl  font-bold text-center py-14">
@@ -123,36 +139,56 @@ function CreatorsDashboard() {
           {!allCollections ? (
             <div className="md:flex justify-center">
               <div className="px-4" style={{ maxWidth: "1600px" }}>
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 pt-4">
-                  {filteredNFTs &&
-                    filteredNFTs.map((nft: any, i: any) => (
+                {filteredNFTs && filteredNFTs.length > 0 ? (
+                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 pt-4">
+                    {filteredNFTs.map((nft: any, i: any) => (
                       <div key={i}>
                         <NFTTile nft={nft} callback={listNFT} button="List" />
                       </div>
                     ))}
-                </div>
+                  </div>
+                ) : (
+                  <div className="flex w-full mx-auto justify-content-center mt-8">
+                    <div className="mx-auto text-center">
+                      <p className="text-4xl font-bold">
+                        <div>You Have No NFTs On This Colleciton</div>
+                      </p>
+                    </div>
+                  </div>
+                )}
               </div>
             </div>
           ) : (
             <div>
               {userNFTsMetada &&
-                collectionList.map((collection, i) => (
-                  <Disclosure
-                    key={i}
-                    collectionName={collection.get("name")}
-                    filteredNFTs={userNFTsMetada.filter((item) => {
+                collectionList.map(
+                  (collection, i) =>
+                    userNFTsMetada.filter((item) => {
                       return (
                         item.address ===
                         collection.get("collectionAddress").toLowerCase()
                       );
-                    })}
-                    listNFT={listNFT}
-                  />
-                ))}
+                    }).length > 0 && (
+                      <Disclosure
+                        key={i}
+                        collectionName={collection.get("name")}
+                        filteredNFTs={userNFTsMetada.filter((item) => {
+                          return (
+                            item.address ===
+                            collection.get("collectionAddress").toLowerCase()
+                          );
+                        })}
+                        listNFT={listNFT}
+                      />
+                    )
+                )}
             </div>
           )}
         </div>
       )}
+
+      {isSuccess && <ToastSucess isOpen={true} toggle={setIsSuccess} />}
+      {isError && <ToastError isOpen={true} toggle={setisError} />}
     </div>
   );
 }

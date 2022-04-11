@@ -6,6 +6,9 @@ import { useQuery } from "react-query";
 import { useMoralis } from "react-moralis";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faImage } from "@fortawesome/free-solid-svg-icons";
+import Processing from "../src/components/Processing";
+import ToastSucess from "../src/components/ToastSucess";
+import ToastError from "../src/components/ToastError";
 
 const Mint = () => {
   const [imgUrl, setImgUrl] = useState("");
@@ -13,8 +16,10 @@ const Mint = () => {
     name: "Name",
     description: "",
   });
-  const [modalValue, setModalValue] = useState("");
-  const [sucessMessage, setSucessMessage] = useState(false);
+  const [processing, setProcessing] = useState(false);
+  const [isSuccess, setIsSuccess] = useState(false);
+  const [isError, setisError] = useState(false);
+
   const [collectionList, setCollectionList] = useState<
     Moralis.Object<Moralis.Attributes>[]
   >([]);
@@ -54,13 +59,14 @@ const Mint = () => {
     setImgUrl(fileURL);
   }
 
-  const success = () => {
+  const callback = () => {
     setImgUrl("");
     updateFormInput({ name: "", description: "" });
-    if (!sucessMessage) {
-      setSucessMessage(true);
+    setProcessing(false);
+    if (!isSuccess) {
+      setIsSuccess(true);
       setTimeout(function () {
-        setSucessMessage(false);
+        setIsSuccess(false);
       }, 5000);
     }
   };
@@ -69,17 +75,24 @@ const Mint = () => {
     const { name, description } = formInput;
     const collectionName = collection.get("name");
     const address = collection.get("collectionAddress");
-    console.log(address);
-    console.log(collectionName);
-    await mint({
+    setProcessing(true);
+    const result = await mint({
       name,
       description,
       imgUrl,
-      setModalValue,
-      success,
+      callback,
       address,
       collectionName,
     });
+    if (!result) {
+      setProcessing(false);
+      if (!isError) {
+        setisError(true);
+        setTimeout(function () {
+          setisError(false);
+        }, 5000);
+      }
+    }
   };
 
   return (
@@ -176,16 +189,10 @@ const Mint = () => {
           </div>
         </div>
       </div>
+      <Processing isOpen={processing} />
 
-      {sucessMessage && (
-        <div className="notification is-success is-justify-content-center is-flex">
-          <button
-            className="delete"
-            onClick={() => setSucessMessage(false)}
-          ></button>
-          <p className="title is-4">Success! 🎉🎉🎉</p>
-        </div>
-      )}
+      {isSuccess && <ToastSucess isOpen={true} toggle={setIsSuccess} />}
+      {isError && <ToastError isOpen={true} toggle={setisError} />}
     </div>
   );
 };

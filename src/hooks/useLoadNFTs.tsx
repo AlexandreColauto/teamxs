@@ -16,7 +16,7 @@ interface metadata {
 }
 function useLoadNFTs() {
   const Web3Api = useMoralisWeb3Api();
-  const [fetch] = useFetchCollection();
+  const [, fetch] = useFetchCollection();
   const { isAuthenticated, Moralis, chainId } = useMoralis();
 
   const fetchNFTs = async (): Promise<
@@ -24,42 +24,34 @@ function useLoadNFTs() {
     | [undefined, undefined, boolean]
   > => {
     const useraddress = Moralis.account;
+    const chainId = Moralis.chainId;
     const [collections, addressDic, loading] = await fetch();
 
     if (!useraddress || !collections) return [, , loading];
-    const _userNFTsCollections = await Promise.all(
-      collections.map(async (col) => {
-        const colAdd: string = col.get("collectionAddress").toLowerCase();
-        const options: typeof Moralis.Web3API.account.getNFTsForContract.arguments =
-          {
-            chain: "0x13881",
-            address: useraddress,
-            token_address: col.get("collectionAddress"),
-          };
-        const result = await Moralis.Web3API.account.getNFTsForContract(
-          options
-        );
-        return result.result;
-      })
-    );
-    if (!_userNFTsCollections.length) return [, , loading];
+
+    const options: typeof Moralis.Web3API.account.getNFTsForContract.arguments =
+      {
+        chain: chainId,
+        address: useraddress,
+      };
+    const _userNFTsCollections = await Moralis.Web3API.account.getNFTs(options);
+    if (!_userNFTsCollections) return [, , loading];
+    if (!_userNFTsCollections.result) return [, , loading];
+    const userNFTsCollections = _userNFTsCollections.result.filter((nft) => {
+      return Object.keys(addressDic).includes(nft.token_address.toLowerCase());
+    });
 
     const nftsMeta: metadata[] = [];
     await Promise.all(
-      _userNFTsCollections.map(async (_userNFTs) => {
-        if (!_userNFTs) return;
-        await Promise.all(
-          _userNFTs.map(async (nft) => {
-            if (!nft.token_uri) return;
-            const metadata = await axios.get(nft.token_uri);
-            metadata.data.collection = addressDic
-              ? addressDic[nft.token_address]
-              : "";
-            metadata.data.address = nft.token_address;
-            metadata.data.id = nft.token_id;
-            nftsMeta.push(metadata.data);
-          })
-        );
+      userNFTsCollections.map(async (nft) => {
+        if (!nft.token_uri) return;
+        const metadata = await axios.get(nft.token_uri);
+        metadata.data.collection = addressDic
+          ? addressDic[nft.token_address]
+          : "";
+        metadata.data.address = nft.token_address;
+        metadata.data.id = nft.token_id;
+        nftsMeta.push(metadata.data);
       })
     );
 

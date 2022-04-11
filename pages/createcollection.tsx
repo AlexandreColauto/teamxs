@@ -1,4 +1,7 @@
 import React, { ChangeEvent, useState } from "react";
+import Processing from "../src/components/Processing";
+import ToastError from "../src/components/ToastError";
+import ToastSucess from "../src/components/ToastSucess";
 import useCreateCollection from "../src/hooks/useCreateCollection";
 const Moralis = require("moralis");
 
@@ -8,39 +11,47 @@ const CreateCollection = () => {
     name: "Name",
     description: "",
   });
-  const [modalValue, setModalValue] = useState("");
-  const [sucessMessage, setSucessMessage] = useState(false);
+  const [isSuccess, setisSuccess] = useState(false);
+  const [isError, setisError] = useState(false);
+  const [processing, setProcessing] = useState(false);
   const [saveFile, create] = useCreateCollection();
-  async function onChange(e: ChangeEvent<HTMLInputElement>) {
-    if (!e.target.files) return;
-    const data = e?.target?.files[0];
-    const fileURL = await saveFile(data);
-    setImgUrl(fileURL);
-  }
 
   const success = () => {
     setImgUrl("");
     updateFormInput({ name: "", description: "" });
-    if (!sucessMessage) {
-      setSucessMessage(true);
+    setProcessing(false);
+    if (!isSuccess) {
+      setisSuccess(true);
       setTimeout(function () {
-        setSucessMessage(false);
+        setisSuccess(false);
       }, 5000);
     }
   };
   const submitCollection = async () => {
     const { name, description } = formInput;
-    await create({
+    setProcessing(true);
+    const result = await create({
       name,
       description,
       imgUrl,
-      setModalValue,
-      success,
+      callback: success,
     });
+    if (!result) {
+      setProcessing(false);
+      if (!isError) {
+        setisError(true);
+        setTimeout(function () {
+          setisError(false);
+        }, 5000);
+      }
+    }
   };
 
   return (
     <div>
+      <Processing isOpen={processing} />
+      {isSuccess && <ToastSucess isOpen={isSuccess} toggle={setisSuccess} />}
+      {isError && <ToastError isOpen={true} toggle={setisError} />}
       <div className="mx-auto mt-10 w-11/12 bg-slate-100 rounded-xl">
         <div className="p-8 pl-14">
           <p className="text-2xl font-bold my-4">Create New Collection</p>

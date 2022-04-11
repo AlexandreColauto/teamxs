@@ -4,37 +4,60 @@ import { Dialog, Transition } from "@headlessui/react";
 import type { metadata } from "../hooks/useLoadNFTs";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCircleXmark } from "@fortawesome/free-solid-svg-icons";
+import Processing from "./Processing";
 
 type props = {
   NFTToList: metadata;
   toggle: () => void;
   isOpen: boolean;
+  setSuccessMessage: (arg: boolean) => void;
+  setErrorMessage: (arg: boolean) => void;
 };
 
 function ModalListNFT(props: props) {
-  const [modalLoading, setModalLoading] = useState("");
+  const [processing, setProcessing] = useState(false);
   const [nftPrice, setNftPrice] = useState("");
   const [isOpen, setOpen] = useState(props.isOpen);
-  const { NFTToList, toggle } = props;
+  const { NFTToList, toggle, setSuccessMessage, setErrorMessage } = props;
   const list = useListNft();
 
   useEffect(() => {
     setOpen(props.isOpen);
-    console.log("first");
+    console.log(processing);
   }, [props.isOpen]);
 
   const handleListing = (NFT: metadata) => {
+    setProcessing(true);
+    console.log(processing);
     const callback = () => {
       toggle();
-      setModalLoading("");
+      setProcessing(false);
+      setSuccessMessage(true);
+      setTimeout(function () {
+        setSuccessMessage(false);
+      }, 5000);
+    };
+    const errCallback = () => {
+      toggle();
+      setProcessing(false);
+      setErrorMessage(true);
+      setTimeout(function () {
+        setErrorMessage(false);
+      }, 5000);
     };
     const options = {
       collectionAddr: NFT.address,
       id: NFT.id,
       nftPrice,
       callback,
+      errCallback,
     };
-    list(options);
+    try {
+      list(options);
+    } catch (err) {
+      console.log(err);
+      setProcessing(false);
+    }
   };
 
   return (
@@ -42,8 +65,8 @@ function ModalListNFT(props: props) {
       <Dialog
         open={true}
         as="div"
-        className="fixed inset-0 z-50  overflow-y-auto"
-        onClose={props.toggle}
+        className="fixed inset-0 z-25  overflow-y-auto"
+        onClose={() => null}
       >
         <div className="flex p-10 border relative justify-center mt-6 bg-slate-100 w-8/12 md:w-5/12 mx-auto rounded-xl">
           <button type="button" onClick={props.toggle}>
@@ -97,6 +120,7 @@ function ModalListNFT(props: props) {
           </div>
         </div>
       </Dialog>
+      <Processing isOpen={processing} />
     </div>
   );
 }

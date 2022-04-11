@@ -8,15 +8,21 @@ const Home: NextPage = () => {
       <div className="flex p-10 justify-between h-10/12 items-center leading-loose ">
         <div>
           <p className="text-7xl font-bold ">
-            Collect, Sell or <br />
-            Create <span className="text-white">Cat NFTs</span>
+            This is the template <br />
+            of our <span className="text-white">NFT Marketplace</span>
           </p>
           <p className="text-[#2c5878] mt-8 font-thin text-lg">
-            A marketplace for cat lovers that raises funds for rescues and makes{" "}
+            Lorem Ipsum is simply dummy text of the printing and typesetting
+            industry. Lorem Ipsum has been the industry&apos;s standard
             <br />
-            the world a <em>meower</em> place. Oh, and get a free NFT when you
-            make a <br />
-            donation (tax deductible) of $50 or more to your favourite rescue.
+            dummy text ever since the 1500s, when an unknown printer
+            <br />
+            Lorem Ipsum is simply dummy text of the printing and typesetting
+            industry. Lorem Ipsum has been the industrys standard
+            <br /> dummy text ever since the 1500s, when an unknown printer
+            <br />
+            Lorem Ipsum is simply dummy text of the printing and typesetting
+            industry. Lorem Ipsum has been the industry&apos;s standard
             <br />
           </p>
           <div className="mt-10">
@@ -26,7 +32,7 @@ const Home: NextPage = () => {
               </button>
             </Link>
             <button className="text-primary  py-2 px-8 font-bold rounded-2xl hover:text-white">
-              Why this matters
+              Info/About
             </button>
           </div>
         </div>
