@@ -43,7 +43,6 @@ const useFetchMarket = (): [fetchItems, filterNFTs] => {
   const fetchItems = async (): Promise<
     [marketItms[], metadata[]] | undefined
   > => {
-    console.log(isWeb3EnableLoading + " " + isWeb3Enabled);
     if (!isWeb3Enabled) return;
     const marketAddress = process.env.NEXT_PUBLIC_NFT_MARKET_ADDRESS;
     const userAddress = await Moralis.account;
@@ -91,7 +90,6 @@ const useFetchMarket = (): [fetchItems, filterNFTs] => {
       marketItms.map(async (item) => {
         if (!CollectionURIDictionary[item.collectionAddress]) {
           const ethers = Moralis.web3Library;
-          console.log(web3);
           if (!web3) return;
           const nftContract = new ethers.Contract(
             item.collectionAddress,

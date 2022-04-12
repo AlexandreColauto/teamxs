@@ -23,12 +23,10 @@ function ModalListNFT(props: props) {
 
   useEffect(() => {
     setOpen(props.isOpen);
-    console.log(processing);
   }, [props.isOpen]);
 
   const handleListing = (NFT: metadata) => {
     setProcessing(true);
-    console.log(processing);
     const callback = () => {
       toggle();
       setProcessing(false);

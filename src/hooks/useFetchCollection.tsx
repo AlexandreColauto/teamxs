@@ -19,11 +19,9 @@ function useFetchCollection() {
 
   const APIFetch = async () => {
     if (!isWeb3Enabled) return;
-    console.log("Call to Moralis");
     const Collection = Moralis.Object.extend("collection");
     const query = new Moralis.Query(Collection);
     const results = await query.find();
-    console.log(results);
     return results;
   };
   const cachedCollection = useQuery("collection", APIFetch, {
@@ -36,8 +34,6 @@ function useFetchCollection() {
   > => {
     if (!isWeb3Enabled) return [, , true];
     const { isLoading, data } = cachedCollection;
-    console.log(cachedCollection);
-    console.log(isLoading);
     const address = Moralis.account;
     const colDictionary: dictionary = {};
     const loading = isLoading;
@@ -68,7 +64,6 @@ function useFetchCollection() {
     const loading = isLoading;
     const _results: any = data;
     const colDictionary: dictionary = {};
-    console.log(_results);
     if (!_results) return [, , isLoading];
     _results.map((col: any) => {
       const colName = col.get("name");

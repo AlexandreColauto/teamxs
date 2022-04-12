@@ -30,7 +30,6 @@ const BuyNFT = () => {
       const listTransaction: any = await Moralis.executeFunction(listItem);
       await listTransaction.wait();
 
-      console.log("all right!");
       callback();
     } catch (err) {
       console.log(err);
