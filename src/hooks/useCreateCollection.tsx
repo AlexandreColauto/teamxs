@@ -28,6 +28,8 @@ function useCreateCollection(): [uploadFile, create] {
       const s3Bucket = process.env.NEXT_PUBLIC_S3_BUCKET_NAME;
       const region = process.env.NEXT_PUBLIC_AWS_REGION;
       const objectType = "application/json"; // type of file
+      console.log(s3Bucket);
+      console.log(region);
       if (!s3Bucket || !region)
         throw new Error(
           "Missing AWS parameters, check your environment variables"
