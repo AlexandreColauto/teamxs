@@ -108,7 +108,7 @@ function Explore() {
 
   return (
     <div className="pb-16">
-      <p className="text-6xl  font-bold text-center py-14">
+      <p className="text-6xl text-[#E8C39C] font-bold text-center py-14">
         Explore Collections
       </p>
       <div className="flex mt-4 bg-black w-8/12 mb-8 mx-auto border border-secondary rounded overflow-hidden">
@@ -142,7 +142,7 @@ function Explore() {
       ) : (
         <div className="md:flex justify-center">
           <div className="px-4" style={{ maxWidth: "1600px" }}>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 pt-4">
+            <div className="grid grid-cols-1 text-[#E8C39C] sm:grid-cols-2 lg:grid-cols-4 gap-4 pt-4">
               {filtered_metadata &&
                 filtered_metadata.map((nft, i) => (
                   <NFTTile

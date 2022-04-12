@@ -15,7 +15,7 @@ function NFTTile(props: props) {
         <img className="object-cover w-60 h-60 rounded-t " src={nft.image} />
         <div className="flex flex-col justify-between">
           <div className="p-4">
-            <p className="text-3x1 text-primary  font-semibold">{nft.name}</p>
+            <p className="text-3x1 text-[#E8C39C]  font-semibold">{nft.name}</p>
             <div>
               <p className="text-gray-400">
                 {nft.description ? nft.description : <br />}
