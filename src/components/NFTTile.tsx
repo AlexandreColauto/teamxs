@@ -23,6 +23,7 @@ function NFTTile(props: props) {
             </div>
             <br />
             {nft.price && <p>Price: {nft.price} BNB </p>}
+            {nft.fee && <p>Fee: {nft.fee / 10} % </p>}
           </div>
           <div className="p-4 bg-transparent">
             <button

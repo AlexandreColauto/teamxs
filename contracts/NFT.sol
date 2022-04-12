@@ -27,10 +27,10 @@ contract NFT is ERC1155 , Ownable {
         _burn(msg.sender, id, 1);
     }
 
-    function currentId() public view returns(uint) {
-        return _tokenIds.current() ;
+    function currentId() public view returns( uint[2] memory) {
+        return [_tokenIds.current(),fee] ;
     }
-    function getFee() public view returns(uint) {
+    function getFee() public view returns( uint) {
         return fee;
     }
     function getCreator() public view returns(address) {

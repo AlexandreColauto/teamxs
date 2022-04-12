@@ -12,7 +12,7 @@ function Setup() {
 
   return (
     <div className="flex justify-center my-24">
-      <div className="text-xl font-bold">
+      <div className="text-xl font-bold text-white">
         <p>
           In order to make the deploy of the website you need to go through some
           steps,

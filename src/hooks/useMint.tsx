@@ -11,9 +11,9 @@ interface props {
   address: string;
   collectionName: string;
 }
-type create = (props: props) => Promise<boolean>;
+type create = (props: props) => Promise<boolean | undefined>;
 function useCreateCollection(): [uploadFile, create] {
-  const { isAuthenticated, Moralis } = useMoralis();
+  const { isAuthenticated, Moralis, authenticate } = useMoralis();
 
   const mint: create = async (props) => {
     const ethers = Moralis.web3Library;
@@ -25,15 +25,17 @@ function useCreateCollection(): [uploadFile, create] {
       alert("Fill the required Information before minting.");
       return false;
     }
+    if (!isAuthenticated) authenticate();
 
     const currentId = {
       contractAddress: address,
       functionName: "currentId",
       abi: NFT.abi,
     };
-    const _tokenId = await Moralis.executeFunction(currentId);
+    const [_tokenId, _fee] = (await Moralis.executeFunction(currentId)) as any;
 
     let tokenId = parseInt(_tokenId.toString(), 10) + 1;
+    let fee = parseInt(_fee.toString(), 10);
 
     console.log(tokenId);
 
@@ -53,7 +55,7 @@ function useCreateCollection(): [uploadFile, create] {
       if (tokenHash) {
         const s3Bucket = "kittie-kat-rescue"; // replace with your bucket name
         const objectType = "application/json"; // type of file
-        const data = JSON.stringify({ name, description, image: imgUrl });
+        const data = JSON.stringify({ name, description, image: imgUrl, fee });
         const tokenIdString = tokenId.toString().padStart(64, "0");
         // setup params for putObject
         const params = {

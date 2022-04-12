@@ -14,12 +14,8 @@ contract NFTMarket is ERC1155Holder, ReentrancyGuard{
     using Counters for Counters.Counter;
     Counters.Counter private _itemIds;
     Counters.Counter private _itemsSold;
-    address payable  private feeWallet;
 
-    constructor(address payable  _feeWallet) { 
-        feeWallet=_feeWallet;
-    }
-
+   
     struct MarketItem {
         uint itemId;
         address nftAddress;
@@ -87,7 +83,7 @@ contract NFTMarket is ERC1155Holder, ReentrancyGuard{
         require(msg.value == item.price, "Please send the correct amount.");
         ERC1155 nft = ERC1155(item.nftAddress);
         nft.safeTransferFrom(address(this),msg.sender,item.tokenId,1,"");
-        NFT _nft = NFT(item.nftAddress);
+        _NFT _nft = _NFT(item.nftAddress);
         uint collectionFee =  _nft.getFee();
         uint fee = (item.price * collectionFee) / 1000;
         address creator = _nft.getCreator();
@@ -101,7 +97,7 @@ contract NFTMarket is ERC1155Holder, ReentrancyGuard{
 
 }
 
-abstract contract   NFT  {
+abstract contract   _NFT  {
    function  getFee() virtual view public returns(uint256);
    function  getCreator() virtual view public returns(address);
 }

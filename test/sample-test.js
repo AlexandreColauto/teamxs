@@ -8,9 +8,12 @@ let market;
 describe("NFT", function () {
   beforeEach(async () => {
     const NFT = await ethers.getContractFactory("NFT");
+    const owner = await ethers.getSigners();
     nft = await NFT.deploy(
       "https://test.com",
-      "0x96858Ea614c48Ff07caB52b7d2879676e6AD87cF"
+      "0x96858Ea614c48Ff07caB52b7d2879676e6AD87cF",
+      25,
+      owner[5].address
     );
     await nft.deployed();
   });
@@ -46,13 +49,15 @@ describe("NFTMarket", function () {
   beforeEach(async () => {
     const owner = await ethers.getSigners();
     const NFTMarket = await ethers.getContractFactory("NFTMarket");
-    market = await NFTMarket.deploy(owner[5].address);
+    market = await NFTMarket.deploy();
     await market.deployed();
 
     const NFT = await ethers.getContractFactory("NFT");
     nft = await NFT.deploy(
       "https://test.com",
-      "0x96858Ea614c48Ff07caB52b7d2879676e6AD87cF"
+      "0x96858Ea614c48Ff07caB52b7d2879676e6AD87cF",
+      25,
+      owner[5].address
     );
     await nft.deployed();
   });

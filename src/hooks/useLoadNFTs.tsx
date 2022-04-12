@@ -13,6 +13,7 @@ interface metadata {
   name: string;
   price?: string;
   marketId?: number;
+  fee?: number;
 }
 function useLoadNFTs() {
   const Web3Api = useMoralisWeb3Api();
@@ -45,13 +46,23 @@ function useLoadNFTs() {
     await Promise.all(
       userNFTsCollections.map(async (nft) => {
         if (!nft.token_uri) return;
-        const metadata = await axios.get(nft.token_uri);
-        metadata.data.collection = addressDic
-          ? addressDic[nft.token_address]
-          : "";
-        metadata.data.address = nft.token_address;
-        metadata.data.id = nft.token_id;
-        nftsMeta.push(metadata.data);
+        try {
+          const metadata = await axios.get(nft.token_uri);
+          metadata.data.collection = addressDic
+            ? addressDic[nft.token_address]
+            : "";
+          metadata.data.address = nft.token_address;
+          metadata.data.id = nft.token_id;
+          nftsMeta.push(metadata.data);
+        } catch (err) {
+          const dataPlaceHolder = {
+            address: nft.token_address,
+            id: nft.token_id,
+            description: "Not Available",
+            image: "/logo.png",
+            name: "Not Available",
+          };
+        }
       })
     );
 

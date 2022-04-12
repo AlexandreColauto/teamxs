@@ -85,13 +85,15 @@ function Explore() {
   const getItems = async () => {
     if (!isWeb3Enabled) return;
     const answer = await fetchItems();
-    setEmpty(!answer?.length);
+    console.log(answer);
 
     if (!answer) return;
+    setEmpty(!answer[0].length);
     const [_marketItms, _metadata] = answer;
     setMarketItms(_marketItms);
     setMetadata(_metadata);
     setfiltered_Metadata(_metadata);
+    filterCollections(_marketItms);
   };
   async function handleBuy(nftToBuy: metadata) {
     setProcessing(true);
@@ -105,6 +107,22 @@ function Explore() {
     };
     await buy({ ...nftToBuy, callback, errCallback });
   }
+  const filterCollections = (marketItms: marketItms[]) => {
+    const filteredCollections: any[] = [];
+    collectionList.map((collection, i) => {
+      console.log(collection);
+      const collectionsItems = marketItms.filter((item) => {
+        console.log(item.collectionAddress);
+        console.log(collection.attributes.collectionAddress);
+        return (
+          item.collectionAddress === collection.attributes.collectionAddress
+        );
+      });
+      if (collectionsItems.length) filteredCollections.push(collection);
+    });
+    console.log(filteredCollections);
+    setCollectionList(filteredCollections);
+  };
 
   return (
     <div className="pb-16">
@@ -133,7 +151,7 @@ function Explore() {
       {empty ? (
         <div className="flex mx-auto justify-content-center mt-8">
           <div className="mx-auto text-center">
-            <p className="text-4xl font-bold">
+            <p className="text-4xl font-bold text-white">
               {" "}
               There&apos;s currently no NFT on the Marketplace, come back later.
             </p>

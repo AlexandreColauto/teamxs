@@ -55,17 +55,16 @@ const Header: NextPage = () => {
       >
         <div className=" mr-10"></div>
         <div className="flow-root">
-        
           <div className="float-left">
-            <Link href="/" >
+            <Link href="/">
               <Image src="/logo.png" alt="logo" width="72" height="72" />
             </Link>
           </div>
 
           <div className="float-right mt-4 mx-6">
-            <Link href="/" >
+            <Link href="/">
               <p className="text-3xl text-[#344D34] font-black cursor-pointer">
-                Carbon Marketplace
+                NFT Marketplace
               </p>
             </Link>
           </div>
@@ -87,7 +86,10 @@ const Header: NextPage = () => {
           onClick={login}
         >
           <span className="w-25">
-            <FontAwesomeIcon icon={faWallet} className="w-7 h-7 text-[#344D34]" />
+            <FontAwesomeIcon
+              icon={faWallet}
+              className="w-7 h-7 text-[#344D34]"
+            />
           </span>
         </button>
         <Link href="/creatorsdashboard">

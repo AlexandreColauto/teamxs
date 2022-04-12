@@ -7,7 +7,7 @@ interface props {
   name: string;
   description?: string;
   imgUrl?: string | null;
-  fee?:string | null;
+  fee?: string | null;
   callback: () => void;
 }
 type create = (props: props) => Promise<boolean>;
@@ -18,7 +18,7 @@ function useCreateCollection(): [uploadFile, create] {
   const create: create = async (props) => {
     const ethers = Moralis.web3Library;
 
-    const { name, description, imgUrl, callback } = props;
+    const { name, description, imgUrl, fee, callback } = props;
 
     if (!name) {
       alert("Give a name to your collection!");
@@ -51,7 +51,12 @@ function useCreateCollection(): [uploadFile, create] {
         NFT.bytecode,
         signer
       );
-      const nft = await tokenContract.deploy(url + "{id}.json", marketAddress);
+      const nft = await tokenContract.deploy(
+        url + "{id}.json",
+        marketAddress,
+        fee,
+        address
+      );
       await nft.deployed();
       console.log("nft deployed to:", nft.address);
 

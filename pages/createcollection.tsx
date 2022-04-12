@@ -3,15 +3,16 @@ import Processing from "../src/components/Processing";
 import ToastError from "../src/components/ToastError";
 import ToastSucess from "../src/components/ToastSucess";
 import useCreateCollection from "../src/hooks/useCreateCollection";
-const Moralis = require("moralis");
+import { useMoralis } from "react-moralis";
 
 const CreateCollection = () => {
   const [imgUrl, setImgUrl] = useState("");
   const [formInput, updateFormInput] = useState({
     name: "Name",
     description: "",
-    fee:"",
+    fee: "",
   });
+  const { isAuthenticated, authenticate } = useMoralis();
   const [isSuccess, setisSuccess] = useState(false);
   const [isError, setisError] = useState(false);
   const [processing, setProcessing] = useState(false);
@@ -19,7 +20,7 @@ const CreateCollection = () => {
 
   const success = () => {
     setImgUrl("");
-    updateFormInput({ name: "", description: "" , fee:""});
+    updateFormInput({ name: "", description: "", fee: "" });
     setProcessing(false);
     if (!isSuccess) {
       setisSuccess(true);
@@ -30,6 +31,7 @@ const CreateCollection = () => {
   };
   const submitCollection = async () => {
     const { name, description, fee } = formInput;
+    if (!isAuthenticated) authenticate();
     setProcessing(true);
     const result = await create({
       name,
@@ -37,7 +39,7 @@ const CreateCollection = () => {
       imgUrl,
       fee,
       callback: success,
-    })
+    });
     if (!result) {
       setProcessing(false);
       if (!isError) {
@@ -53,8 +55,12 @@ const CreateCollection = () => {
     <div>
       <div className="mx-auto mt-10 w-1/2 text-center bg-white rounded-xl">
         <div className="p-8 pl-14">
-          <p className="text-5xl font-bold text-[#404D3A] my-6">Create New Collection</p>
-          <label className="mt-12 text-2xl font-normal label">Collection Name</label>
+          <p className="text-5xl font-bold text-[#404D3A] my-6">
+            Create New Collection
+          </p>
+          <label className="mt-12 text-2xl font-normal label">
+            Collection Name
+          </label>
           <div className="">
             <input
               className="rounded bg-inherit border-2 border-[#404D3A] pl-1"
@@ -79,7 +85,7 @@ const CreateCollection = () => {
             </div>
           </div>
           <div className="mt-8">
-            <label className="text-2xl">Creator Fee (Gwei)</label>
+            <label className="text-2xl">Creator Fee (%))</label>
             <div className="">
               <input
                 className="pl-1 rounded bg-inherit border-2 border-[#404D3A]"

@@ -17,9 +17,7 @@ function useCreateCollection(): [create] {
         NFTMarket.bytecode,
         signer
       );
-      const nft = await tokenContract.deploy(
-        "0xD9124C091f7bebDE21990b6C8964e54CC61d2297"
-      );
+      const nft = await tokenContract.deploy();
       await nft.deployed();
       console.log("nft deployed to:", nft.address);
 
