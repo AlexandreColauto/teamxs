@@ -85,14 +85,15 @@ const CreateCollection = () => {
             </div>
           </div>
           <div className="mt-8">
-            <label className="text-2xl">Creator Fee (%))</label>
+            <label className="text-2xl">Creator Fee (%)</label>
             <div className="">
               <input
+                placeholder="2.5"
                 className="pl-1 rounded bg-inherit border-2 border-[#404D3A]"
                 onChange={(e) =>
                   updateFormInput({
                     ...formInput,
-                    fee: e.target.value,
+                    fee: Math.round(parseFloat(e.target.value) * 10).toString(),
                   })
                 }
               ></input>
