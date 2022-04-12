@@ -31,7 +31,6 @@ function CreatorsDashboard() {
   });
 
   const toggleModal = () => {
-    console.log(modalOpen);
     setModalOpen(!modalOpen);
   };
 
@@ -46,7 +45,6 @@ function CreatorsDashboard() {
       setEmpty(!_metadata?.length);
       setUserNFTsMetada(_metadata);
       setFilteredNFTs(_metadata);
-      console.log(_metadata);
       if (!_collectionList) return;
       setCollectionList(_collectionList);
       setAllCollections(true);
@@ -62,7 +60,6 @@ function CreatorsDashboard() {
   };
 
   const listNFT = async (nft: metadata) => {
-    console.log(nftToList);
     setnftToList(nft);
     toggleModal();
     return;

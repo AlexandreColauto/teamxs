@@ -5,9 +5,7 @@ import Mint from "./mint";
 
 function Create() {
   const [collection, setColection] = useState(false);
-  useEffect(() => {
-    console.log(collection);
-  }, [collection]);
+
   return (
     <div className="w-full mt-6 pb-24">
       <div className="justify-items-center items-center flex flex-col pt-5">
@@ -22,6 +20,5 @@ function Create() {
     </div>
   );
 }
-
 
 export default Create;

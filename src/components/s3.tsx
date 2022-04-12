@@ -1,7 +1,7 @@
 import AWS from "aws-sdk";
 
-const S3_BUCKET = "kittie-kat-rescue";
-const REGION = "eu-west-3";
+const S3_BUCKET = process.env.NEXT_PUBLIC_S3_BUCKET_NAME;
+const REGION = process.env.NEXT_PUBLIC_AWS_REGION;
 
 AWS.config.update({
   accessKeyId: process.env.NEXT_PUBLIC_ACCESSKEYID,

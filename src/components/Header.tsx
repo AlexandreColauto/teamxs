@@ -19,13 +19,12 @@ const Header: NextPage = () => {
 
   useEffect(() => {
     tryWeb3();
-  }, []);
+  }, [isAuthenticated]);
 
   const tryWeb3 = () => {
-    !isWeb3Enabled && !isAuthenticated ? enableWeb3() : null;
+    !isWeb3Enabled && isAuthenticated ? enableWeb3() : null;
   };
   async function login() {
-    console.log(isAuthenticated);
     tryWeb3();
     if (!user) {
       const user = await authenticate({

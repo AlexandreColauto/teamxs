@@ -25,8 +25,13 @@ function useCreateCollection(): [uploadFile, create] {
       return false;
     }
     try {
-      const s3Bucket = "kittie-kat-rescue"; // replace with your bucket name
+      const s3Bucket = process.env.NEXT_PUBLIC_S3_BUCKET_NAME;
+      const region = process.env.NEXT_PUBLIC_AWS_REGION;
       const objectType = "application/json"; // type of file
+      if (!s3Bucket || !region)
+        throw new Error(
+          "Missing AWS parameters, check your environment variables"
+        );
       // try {
       // setup params for putObject
       const params = {
@@ -34,18 +39,19 @@ function useCreateCollection(): [uploadFile, create] {
         ACL: "public-read",
         Key: name + "/",
       };
-      console.log(s3);
       const result = s3.putObject(params);
 
-      console.log(result);
       const web3Provider = await Moralis.enableWeb3();
       const signer = await web3Provider.getSigner();
       const address = await Moralis.account;
       const url =
-        "https://kittie-kat-rescue.s3.eu-west-3.amazonaws.com/" +
+        "https://" +
+        s3Bucket +
+        ".s3." +
+        region +
+        ".amazonaws.com/" +
         name.replace(" ", "+") +
         "/";
-      console.log(address);
       const tokenContract = new ethers.ContractFactory(
         NFT.abi,
         NFT.bytecode,

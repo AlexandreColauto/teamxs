@@ -20,7 +20,6 @@ function useCreateCollection(): [uploadFile, create] {
 
     const { name, description, imgUrl, callback, address, collectionName } =
       props;
-    console.log(props);
     if (!name || !imgUrl) {
       alert("Fill the required Information before minting.");
       return false;
@@ -37,10 +36,6 @@ function useCreateCollection(): [uploadFile, create] {
     let tokenId = parseInt(_tokenId.toString(), 10) + 1;
     let fee = parseInt(_fee.toString(), 10);
 
-    console.log(tokenId);
-
-    console.log("actual name" + collectionName);
-
     const mint = {
       contractAddress: address,
       functionName: "mint",
@@ -53,7 +48,10 @@ function useCreateCollection(): [uploadFile, create] {
       const tokenHash: any = await Moralis.executeFunction(mint);
 
       if (tokenHash) {
-        const s3Bucket = "kittie-kat-rescue"; // replace with your bucket name
+        const s3Bucket = process.env.NEXT_PUBLIC_S3_BUCKET_NAME;
+        if (!s3Bucket) {
+          throw new Error("bucket missing, chech your config file");
+        }
         const objectType = "application/json"; // type of file
         const data = JSON.stringify({ name, description, image: imgUrl, fee });
         const tokenIdString = tokenId.toString().padStart(64, "0");
@@ -67,7 +65,6 @@ function useCreateCollection(): [uploadFile, create] {
         const result = s3.putObject(params, (err) => {
           console.log(err);
         });
-        console.log(result);
       }
       await tokenHash.wait();
       callback();

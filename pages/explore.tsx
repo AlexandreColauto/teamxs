@@ -37,6 +37,9 @@ function Explore() {
   const [collectionList, setCollectionList] = useState<
     Moralis.Object<Moralis.Attributes>[]
   >([]);
+  const [filteredcollectionList, setfilteredcollectionList] = useState<
+    Moralis.Object<Moralis.Attributes>[]
+  >([]);
   const [, fetchAll] = useFetchCollection();
   const [marketItms, setMarketItms] = useState<marketItms[]>();
   const [metadata, setMetadata] = useState<metadata[]>();
@@ -60,6 +63,11 @@ function Explore() {
     getCollections();
   }, [isLoading]);
 
+  useEffect(() => {
+    if (!marketItms || !collectionList) return;
+    filterCollections(marketItms);
+  }, [marketItms, collectionList]);
+
   const getCollections = async () => {
     if (!isWeb3Enabled) return;
     const [_collections] = await fetchAll();
@@ -69,7 +77,6 @@ function Explore() {
 
   async function picklistChange(e: React.ChangeEvent<HTMLSelectElement>) {
     const collectionName = e.target.value;
-    console.log(collectionName);
     if (collectionName === "All Collections") {
       setfiltered_Metadata(metadata);
       return;
@@ -85,7 +92,6 @@ function Explore() {
   const getItems = async () => {
     if (!isWeb3Enabled) return;
     const answer = await fetchItems();
-    console.log(answer);
 
     if (!answer) return;
     setEmpty(!answer[0].length);
@@ -109,19 +115,16 @@ function Explore() {
   }
   const filterCollections = (marketItms: marketItms[]) => {
     const filteredCollections: any[] = [];
+    if (!marketItms) return;
     collectionList.map((collection, i) => {
-      console.log(collection);
       const collectionsItems = marketItms.filter((item) => {
-        console.log(item.collectionAddress);
-        console.log(collection.attributes.collectionAddress);
         return (
           item.collectionAddress === collection.attributes.collectionAddress
         );
       });
       if (collectionsItems.length) filteredCollections.push(collection);
     });
-    console.log(filteredCollections);
-    setCollectionList(filteredCollections);
+    setfilteredcollectionList(filteredCollections);
   };
 
   return (
@@ -140,7 +143,7 @@ function Explore() {
           }}
         >
           <option>All Collections</option>
-          {collectionList.map((collection, i) => (
+          {filteredcollectionList.map((collection, i) => (
             <option key={i} value={collection.get("collectionAddress")}>
               {collection.get("name")}
             </option>
