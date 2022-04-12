@@ -91,7 +91,7 @@ function CreatorsDashboard() {
       {empty ? (
         <div className="flex mx-auto justify-content-center mt-8">
           <div className="mx-auto text-center">
-            <p className="text-4xl font-bold">
+            <p className="text-4xl text-[#E8C39C] font-bold">
               {" "}
               You currently have no NFT, you can mint another one.
             </p>
@@ -109,13 +109,13 @@ function CreatorsDashboard() {
           {modalOpen && nftToList && (
             <ModalListNFT
               isOpen={true}
-              toggle={callback}
+              toggle={toggleModal}
               NFTToList={nftToList}
-              setSuccessMessage={setIsSuccess}
               setErrorMessage={setisError}
+              setSuccessMessage={setIsSuccess}
             />
           )}
-          <p className="text-5xl  font-bold text-center py-14">
+          <p className="text-5xl text-[#E8C39C] font-bold text-center py-14">
             Your Collection
           </p>
           <div className="flex mt-4 bg-black w-4/12 mb-8 mx-auto border border-secondary rounded overflow-hidden">
@@ -139,49 +139,32 @@ function CreatorsDashboard() {
           {!allCollections ? (
             <div className="md:flex justify-center">
               <div className="px-4" style={{ maxWidth: "1600px" }}>
-                {filteredNFTs && filteredNFTs.length > 0 ? (
-                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 pt-4">
-                    {filteredNFTs.map((nft: any, i: any) => (
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 pt-4">
+                  {filteredNFTs &&
+                    filteredNFTs.map((nft: any, i: any) => (
                       <div key={i}>
                         <NFTTile nft={nft} callback={listNFT} button="List" />
                       </div>
                     ))}
-                  </div>
-                ) : (
-                  <div className="flex w-full mx-auto justify-content-center mt-8">
-                    <div className="mx-auto text-center">
-                      <p className="text-4xl font-bold">
-                        <div>You Have No NFTs On This Colleciton</div>
-                      </p>
-                    </div>
-                  </div>
-                )}
+                </div>
               </div>
             </div>
           ) : (
             <div>
               {userNFTsMetada &&
-                collectionList.map(
-                  (collection, i) =>
-                    userNFTsMetada.filter((item) => {
+                collectionList.map((collection, i) => (
+                  <Disclosure
+                    key={i}
+                    collectionName={collection.get("name")}
+                    filteredNFTs={userNFTsMetada.filter((item) => {
                       return (
                         item.address ===
                         collection.get("collectionAddress").toLowerCase()
                       );
-                    }).length > 0 && (
-                      <Disclosure
-                        key={i}
-                        collectionName={collection.get("name")}
-                        filteredNFTs={userNFTsMetada.filter((item) => {
-                          return (
-                            item.address ===
-                            collection.get("collectionAddress").toLowerCase()
-                          );
-                        })}
-                        listNFT={listNFT}
-                      />
-                    )
-                )}
+                    })}
+                    listNFT={listNFT}
+                  />
+                ))}
             </div>
           )}
         </div>

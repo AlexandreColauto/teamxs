@@ -6,7 +6,7 @@ const Layout: NextPage = (props) => {
   return (
     <div>
       <Header />
-      <div>{props.children}</div>
+      <div className="bg-gradient-to-l pt-3 pb-5 pl-4 from-zinc-900 to-[#404D3A]">{props.children}</div>
       <Footer />
     </div>
   );

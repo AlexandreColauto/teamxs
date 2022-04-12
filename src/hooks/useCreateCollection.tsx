@@ -7,6 +7,7 @@ interface props {
   name: string;
   description?: string;
   imgUrl?: string | null;
+  fee?:string | null;
   callback: () => void;
 }
 type create = (props: props) => Promise<boolean>;

@@ -10,6 +10,7 @@ const CreateCollection = () => {
   const [formInput, updateFormInput] = useState({
     name: "Name",
     description: "",
+    fee:"",
   });
   const [isSuccess, setisSuccess] = useState(false);
   const [isError, setisError] = useState(false);
@@ -18,7 +19,7 @@ const CreateCollection = () => {
 
   const success = () => {
     setImgUrl("");
-    updateFormInput({ name: "", description: "" });
+    updateFormInput({ name: "", description: "" , fee:""});
     setProcessing(false);
     if (!isSuccess) {
       setisSuccess(true);
@@ -28,14 +29,15 @@ const CreateCollection = () => {
     }
   };
   const submitCollection = async () => {
-    const { name, description } = formInput;
+    const { name, description, fee } = formInput;
     setProcessing(true);
     const result = await create({
       name,
       description,
       imgUrl,
+      fee,
       callback: success,
-    });
+    })
     if (!result) {
       setProcessing(false);
       if (!isError) {
@@ -49,29 +51,24 @@ const CreateCollection = () => {
 
   return (
     <div>
-      <Processing isOpen={processing} />
-      {isSuccess && <ToastSucess isOpen={isSuccess} toggle={setisSuccess} />}
-      {isError && <ToastError isOpen={true} toggle={setisError} />}
-      <div className="mx-auto mt-10 w-11/12 bg-slate-100 rounded-xl">
+      <div className="mx-auto mt-10 w-1/2 text-center bg-white rounded-xl">
         <div className="p-8 pl-14">
-          <p className="text-2xl font-bold my-4">Create New Collection</p>
-          <label className="label">Collection Name</label>
+          <p className="text-5xl font-bold text-[#404D3A] my-6">Create New Collection</p>
+          <label className="mt-12 text-2xl font-normal label">Collection Name</label>
           <div className="">
             <input
-              className="rounded pl-1"
+              className="rounded bg-inherit border-2 border-[#404D3A] pl-1"
               type="text"
-              placeholder="Crypto something..."
               onChange={(e) =>
                 updateFormInput({ ...formInput, name: e.target.value })
               }
             />
           </div>
-          <div className="mt-4">
-            <label className="">Description</label>
+          <div className="mt-8">
+            <label className="text-2xl">Description</label>
             <div className="">
               <input
-                className="pl-1 rounded"
-                placeholder="Cute kitten"
+                className="pl-1 rounded bg-inherit border-2 border-[#404D3A]"
                 onChange={(e) =>
                   updateFormInput({
                     ...formInput,
@@ -81,8 +78,22 @@ const CreateCollection = () => {
               ></input>
             </div>
           </div>
+          <div className="mt-8">
+            <label className="text-2xl">Creator Fee (Gwei)</label>
+            <div className="">
+              <input
+                className="pl-1 rounded bg-inherit border-2 border-[#404D3A]"
+                onChange={(e) =>
+                  updateFormInput({
+                    ...formInput,
+                    fee: e.target.value,
+                  })
+                }
+              ></input>
+            </div>
+          </div>
           <button
-            className="mt-4 bg-slate-200 rounded-lg p-2 hover:drop-shadow"
+            className="mt-8 bg-[#404D3A] text-[#E8C39C]  rounded-lg p-2 hover:drop-shadow"
             onClick={submitCollection}
           >
             Create

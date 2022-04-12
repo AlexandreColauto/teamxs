@@ -96,90 +96,89 @@ const Mint = () => {
   };
 
   return (
-    <div>
-      <div className="mx-auto mt-10 w-11/12 bg-slate-100 rounded-xl">
-        <div className="p-8 pl-14">
-          <p className="text-2xl font-bold my-4">Create New NFT</p>
-          <div className="w-min">
-            <label className="file-label">
-              <input
-                className="hidden"
-                type="file"
-                name="resume"
-                onChange={onChange}
-              />
-              <div
-                className={`w-[350px] h-[350px] overflow-hidden grid place-content-center hover:drop-shadow-md ml-0 cursor-pointer rounded-xl ${
-                  imgUrl ? "" : "border  border-2 border-dashed"
-                } `}
-              >
-                {imgUrl ? (
-                  <img className="rounded mt-4" width="350" src={imgUrl} />
-                ) : (
-                  <FontAwesomeIcon
-                    icon={faImage}
-                    className="w-16 h-16 text-slate-300"
-                  />
-                )}
-              </div>
-            </label>
-          </div>
-          <div className="mt-6 flex items-center">
-            <label className="">NFT Name</label>
-            <div className="">
-              <input
-                className="rounded p-1 ml-2"
-                type="text"
-                placeholder="Crypto something..."
-                onChange={(e) =>
-                  updateFormInput({ ...formInput, name: e.target.value })
-                }
-              />
+    <div className="mt-10">
+    <div className="mx-auto mt-10 w-1/2 bg-white py-4 rounded-xl">
+      <div className="p-8 pl-14 text-center">
+        <p className="text-5xl font-bold text-[#404D3A] my-6">Create New Item</p>
+        <div className="mt-10">
+          <label className="file-label">
+            <input
+              className="hidden"
+              type="file"
+              name="resume"
+              onChange={onChange}
+            />
+            <div
+              className={`w-[350px] mx-auto h-[350px] overflow-hidden grid place-content-center hover:drop-shadow-md cursor-pointer rounded-xl ${
+                imgUrl ? "" : "border-[#404D3A] border-2 border-dashed"
+              } `}
+            >
+              {imgUrl ? (
+                <img className="rounded mt-4" width="350" src={imgUrl} />
+              ) : (
+                <FontAwesomeIcon
+                  icon={faImage}
+                  className="w-16 h-16 text-[#404D3A]"
+                />
+              )}
             </div>
+          </label>
+        </div>
+        <div className=" mt-4 items-center">
+          <label className=" text-2xl label">NFT Name</label>
+          <div className="">
+            <input
+              className="pl-1 rounded bg-inherit border-2 border-[#404D3A]"
+              type="text"
+              onChange={(e) =>
+                updateFormInput({ ...formInput, name: e.target.value })
+              }
+            />
           </div>
-          <div className="mt-4 flex items-center">
-            <label className="">Description</label>
-            <div className="">
-              <input
-                className="p-1 rounded ml-2"
-                placeholder="Cute kitten"
-                onChange={(e) =>
-                  updateFormInput({
-                    ...formInput,
-                    description: e.target.value,
-                  })
-                }
-              ></input>
-            </div>
+        </div>
+        <div className="mt-12 text-2xl">
+          <label className="">Description</label>
+          <div className="">
+            <input
+              className="pl-1 rounded bg-inherit border-2 border-[#404D3A]"
+              onChange={(e) =>
+                updateFormInput({
+                  ...formInput,
+                  description: e.target.value,
+                })
+              }
+            ></input>
           </div>
-          <div className="mt-4 flex w-full ">
-            <label className="pt-1">Collection</label>
-            <div className="w-full ml-4">
-              {!!collectionList.length && (
-                <div>
-                  <div className="select rounded">
-                    <select
-                      className="bg-white w-3/12 p-2 "
-                      onChange={(e) => {
-                        picklistChange(e);
-                      }}
-                    >
-                      {collectionList.map((collection, i) => (
-                        <option key={i} className="rounded">
-                          {collection.get("name")}
-                        </option>
-                      ))}
-                    </select>
-                  </div>
+        </div>
+        <div className="mt-12 text-2xl">
+          <label className="pt-1">Collection</label>
+          <div className="w-full mt-5">
+            {!!collectionList.length && (
+              <div>
+                <div className="select rounded">
+                  <select
+                    className="bg-white w-3/12 p-2 border-[#404D3A] border-2 rounded"
+                    onChange={(e) => {
+                      picklistChange(e);
+                    }}
+                  >
+                    {collectionList.map((collection, i) => (
+                      <option key={i} className="rounded">
+                        {collection.get("name")}
+                      </option>
+                    ))}
+                  </select>
+                </div>
 
-                  <br />
-                  <div className="field is-grouped">
-                    <div className="control">
-                      <button
-                        className="mt-4 bg-slate-200 rounded-lg p-2 px-6  hover:drop-shadow"
-                        onClick={executeMint}
-                      >
-                        Mint
+                <br />
+                <div className="field is-grouped">
+                  <div className="control">
+                    <button
+                      className="mt-4 bg-[#404D3A] text-[#E8C39C] rounded-lg p-2 px-6  hover:drop-shadow"
+                      onClick={executeMint}
+                    >
+                      Mint
+
                       </button>
                     </div>
                   </div>

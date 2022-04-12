@@ -10,8 +10,8 @@ module.exports = {
         body: ["Rubik"],
       },
       colors: {
-        primary: "#111731",
-        secondary: "#87c7e4",
+        primary: "#404D3A",
+        secondary: "#404D3A",
         normal: "#708496",
       },
     },
