@@ -107,6 +107,9 @@ const CreateCollection = () => {
           </button>
         </div>
       </div>
+      <Processing isOpen={processing} />
+      {isSuccess && <ToastSucess isOpen={isSuccess} toggle={setisSuccess} />}
+      {isError && <ToastError isOpen={isError} toggle={setisError} />}
     </div>
   );
 };
