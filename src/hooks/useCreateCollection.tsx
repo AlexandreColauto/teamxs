@@ -1,5 +1,5 @@
 import { useMoralis } from "react-moralis";
-import s3 from "../components/s3";
+import s3 from "../../lib/s3";
 import NFT from "../../artifacts/contracts/NFT.sol/NFT.json";
 
 type uploadFile = (e: File) => Promise<string>;
@@ -26,7 +26,7 @@ function useCreateCollection(): [uploadFile, create] {
     }
     try {
       const s3Bucket = process.env.NEXT_PUBLIC_S3_BUCKET_NAME;
-      const region = process.env.NEXT_PUBLIC_AWS_REGION;
+      const region = process.env.NEXT_PUBLIC_MY_AWS_REGION;
       const objectType = "application/json"; // type of file
       console.log(s3Bucket);
       console.log(region);

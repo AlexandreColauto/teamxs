@@ -47,6 +47,7 @@ function useLoadNFTs() {
       userNFTsCollections.map(async (nft) => {
         if (!nft.token_uri) return;
         try {
+          console.log(nft.token_uri);
           const metadata = await axios.get(nft.token_uri);
           metadata.data.collection = addressDic
             ? addressDic[nft.token_address]
