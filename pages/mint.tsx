@@ -56,6 +56,7 @@ const Mint = () => {
     const data = e?.target?.files[0];
     if (!data) return;
     const fileURL = await saveFile(data);
+    console.log(fileURL);
     setImgUrl(fileURL);
   }
 
@@ -97,88 +98,89 @@ const Mint = () => {
 
   return (
     <div className="mt-10">
-    <div className="mx-auto mt-10 w-1/2 bg-white py-4 rounded-xl">
-      <div className="p-8 pl-14 text-center">
-        <p className="text-5xl font-bold text-[#404D3A] my-6">Create New Item</p>
-        <div className="mt-10">
-          <label className="file-label">
-            <input
-              className="hidden"
-              type="file"
-              name="resume"
-              onChange={onChange}
-            />
-            <div
-              className={`w-[350px] mx-auto h-[350px] overflow-hidden grid place-content-center hover:drop-shadow-md cursor-pointer rounded-xl ${
-                imgUrl ? "" : "border-[#404D3A] border-2 border-dashed"
-              } `}
-            >
-              {imgUrl ? (
-                <img className="rounded mt-4" width="350" src={imgUrl} />
-              ) : (
-                <FontAwesomeIcon
-                  icon={faImage}
-                  className="w-16 h-16 text-[#404D3A]"
-                />
-              )}
+      <div className="mx-auto mt-10 w-1/2 bg-white py-4 rounded-xl">
+        <div className="p-8 pl-14 text-center">
+          <p className="text-5xl font-bold text-[#404D3A] my-6">
+            Create New Item
+          </p>
+          <div className="mt-10">
+            <label className="file-label">
+              <input
+                className="hidden"
+                type="file"
+                name="resume"
+                onChange={onChange}
+              />
+              <div
+                className={`w-[350px] mx-auto h-[350px] overflow-hidden grid place-content-center hover:drop-shadow-md cursor-pointer rounded-xl ${
+                  imgUrl ? "" : "border-[#404D3A] border-2 border-dashed"
+                } `}
+              >
+                {imgUrl ? (
+                  <img className="rounded mt-4" width="350" src={imgUrl} />
+                ) : (
+                  <FontAwesomeIcon
+                    icon={faImage}
+                    className="w-16 h-16 text-[#404D3A]"
+                  />
+                )}
+              </div>
+            </label>
+          </div>
+          <div className=" mt-4 items-center">
+            <label className=" text-2xl label">NFT Name</label>
+            <div className="">
+              <input
+                className="pl-1 rounded bg-inherit border-2 border-[#404D3A]"
+                type="text"
+                onChange={(e) =>
+                  updateFormInput({ ...formInput, name: e.target.value })
+                }
+              />
             </div>
-          </label>
-        </div>
-        <div className=" mt-4 items-center">
-          <label className=" text-2xl label">NFT Name</label>
-          <div className="">
-            <input
-              className="pl-1 rounded bg-inherit border-2 border-[#404D3A]"
-              type="text"
-              onChange={(e) =>
-                updateFormInput({ ...formInput, name: e.target.value })
-              }
-            />
           </div>
-        </div>
-        <div className="mt-12 text-2xl">
-          <label className="">Description</label>
-          <div className="">
-            <input
-              className="pl-1 rounded bg-inherit border-2 border-[#404D3A]"
-              onChange={(e) =>
-                updateFormInput({
-                  ...formInput,
-                  description: e.target.value,
-                })
-              }
-            ></input>
+          <div className="mt-12 text-2xl">
+            <label className="">Description</label>
+            <div className="">
+              <input
+                className="pl-1 rounded bg-inherit border-2 border-[#404D3A]"
+                onChange={(e) =>
+                  updateFormInput({
+                    ...formInput,
+                    description: e.target.value,
+                  })
+                }
+              ></input>
+            </div>
           </div>
-        </div>
-        <div className="mt-12 text-2xl">
-          <label className="pt-1">Collection</label>
-          <div className="w-full mt-5">
-            {!!collectionList.length && (
-              <div>
-                <div className="select rounded">
-                  <select
-                    className="bg-white w-3/12 p-2 border-[#404D3A] border-2 rounded"
-                    onChange={(e) => {
-                      picklistChange(e);
-                    }}
-                  >
-                    {collectionList.map((collection, i) => (
-                      <option key={i} className="rounded">
-                        {collection.get("name")}
-                      </option>
-                    ))}
-                  </select>
-                </div>
-
-                <br />
-                <div className="field is-grouped">
-                  <div className="control">
-                    <button
-                      className="mt-4 bg-[#404D3A] text-[#E8C39C] rounded-lg p-2 px-6  hover:drop-shadow"
-                      onClick={executeMint}
+          <div className="mt-12 text-2xl">
+            <label className="pt-1">Collection</label>
+            <div className="w-full mt-5">
+              {!!collectionList.length && (
+                <div>
+                  <div className="select rounded">
+                    <select
+                      className="bg-white w-3/12 p-2 border-[#404D3A] border-2 rounded"
+                      onChange={(e) => {
+                        picklistChange(e);
+                      }}
                     >
-                      Mint
+                      {collectionList.map((collection, i) => (
+                        <option key={i} className="rounded">
+                          {collection.get("name")}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
 
+                  <br />
+                  <div className="field is-grouped">
+                    <div className="control">
+                      <button
+                        className="mt-4 bg-[#404D3A] text-[#E8C39C] rounded-lg p-2 px-6  hover:drop-shadow"
+                        onClick={executeMint}
+                      >
+                        Mint
                       </button>
                     </div>
                   </div>

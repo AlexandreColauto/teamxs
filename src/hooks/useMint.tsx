@@ -46,7 +46,7 @@ function useCreateCollection(): [uploadFile, create] {
       },
     };
     try {
-      const tokenHash: any = true; //await Moralis.executeFunction(mint);
+      const tokenHash: any = await Moralis.executeFunction(mint);
 
       if (tokenHash) {
         const contentType = "application/json"; // type of file
@@ -62,9 +62,8 @@ function useCreateCollection(): [uploadFile, create] {
         };
 
         const resp = await axios.post("/api/upload", payload);
-        // const result = putObject({ key, body, contentType });
       }
-      //await tokenHash.wait();
+      await tokenHash.wait();
       callback();
       return true;
     } catch (err) {

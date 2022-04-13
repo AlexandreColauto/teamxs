@@ -7,10 +7,6 @@ interface putObject {
 }
 
 export const putObject = async ({ key, body, contentType }: putObject) => {
-  console.log("put object");
-  console.log(process.env.AWS_ACCESS_KEY_ID_MYAPP);
-  console.log(process.env.AWS_SECRET_ACCESS_KEY_MYAPP);
-  console.log(process.env.test);
   if (
     !process.env.AWS_ACCESS_KEY_ID_MYAPP ||
     !process.env.AWS_SECRET_ACCESS_KEY_MYAPP
@@ -46,4 +42,8 @@ export const putObject = async ({ key, body, contentType }: putObject) => {
   const results = await s3.send(new PutObjectCommand(objectParams));
   console.log(results);
   return results;
+};
+
+export const getAWS = () => {
+  return [process.env.AWS_BUCKET_MYAPP, process.env.AWS_REGION_MYAPP];
 };

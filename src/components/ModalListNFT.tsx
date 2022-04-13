@@ -64,7 +64,7 @@ function ModalListNFT(props: props) {
         open={true}
         as="div"
         className="fixed inset-0 z-25  overflow-y-auto"
-        onClose={() => null}
+        onClose={() => setOpen(false)}
       >
         <div className="flex p-10 border relative justify-center mt-6 bg-slate-100 w-8/12 md:w-5/12 mx-auto rounded-xl">
           <button type="button" onClick={props.toggle}>

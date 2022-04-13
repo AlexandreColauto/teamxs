@@ -1,5 +1,5 @@
 import { useMoralis } from "react-moralis";
-import s3 from "../../lib/s3";
+import axios from "axios";
 import NFT from "../../artifacts/contracts/NFT.sol/NFT.json";
 
 type uploadFile = (e: File) => Promise<string>;
@@ -25,24 +25,20 @@ function useCreateCollection(): [uploadFile, create] {
       return false;
     }
     try {
-      const s3Bucket = process.env.NEXT_PUBLIC_S3_BUCKET_NAME;
-      const region = process.env.NEXT_PUBLIC_MY_AWS_REGION;
-      const objectType = "application/json"; // type of file
-      console.log(s3Bucket);
-      console.log(region);
-      if (!s3Bucket || !region)
-        throw new Error(
-          "Missing AWS parameters, check your environment variables"
-        );
-      // try {
+      const contentType = "application/json"; // type of file
       // setup params for putObject
-      const params = {
-        Bucket: s3Bucket,
-        ACL: "public-read",
-        Key: name + "/",
+      const key = name + "/";
+      const payload = {
+        key,
+        contentType,
       };
-      const result = s3.putObject(params);
 
+      const resp = await axios.post("/api/upload", payload);
+      const response = await axios.get("/api/aws");
+
+      if (response.status !== 200) return false;
+      const [s3Bucket, region] = response.data;
+      console.log(response.data);
       const web3Provider = await Moralis.enableWeb3();
       const signer = await web3Provider.getSigner();
       const address = await Moralis.account;
