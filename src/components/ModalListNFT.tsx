@@ -5,6 +5,7 @@ import type { metadata } from "../hooks/useLoadNFTs";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCircleXmark } from "@fortawesome/free-solid-svg-icons";
 import Processing from "./Processing";
+import { useRouter } from "next/router";
 
 type props = {
   NFTToList: metadata;
@@ -20,7 +21,7 @@ function ModalListNFT(props: props) {
   const [isOpen, setOpen] = useState(props.isOpen);
   const { NFTToList, toggle, setSuccessMessage, setErrorMessage } = props;
   const list = useListNft();
-
+  const router = useRouter();
   useEffect(() => {
     setOpen(props.isOpen);
   }, [props.isOpen]);
@@ -28,17 +29,18 @@ function ModalListNFT(props: props) {
   const handleListing = (NFT: metadata) => {
     setProcessing(true);
     const callback = () => {
-      toggle();
       setProcessing(false);
       setSuccessMessage(true);
+      toggle();
       setTimeout(function () {
         setSuccessMessage(false);
       }, 5000);
+      router.reload();
     };
     const errCallback = () => {
-      toggle();
       setProcessing(false);
       setErrorMessage(true);
+      toggle();
       setTimeout(function () {
         setErrorMessage(false);
       }, 5000);
@@ -61,7 +63,7 @@ function ModalListNFT(props: props) {
   return (
     <div className="">
       <Dialog
-        open={true}
+        open={isOpen}
         as="div"
         className="fixed inset-0 z-25  overflow-y-auto"
         onClose={() => setOpen(false)}

@@ -103,9 +103,9 @@ function CreatorsDashboard() {
         </div>
       ) : (
         <div>
-          {modalOpen && nftToList && (
+          {nftToList && (
             <ModalListNFT
-              isOpen={true}
+              isOpen={modalOpen}
               toggle={toggleModal}
               NFTToList={nftToList}
               setErrorMessage={setisError}
