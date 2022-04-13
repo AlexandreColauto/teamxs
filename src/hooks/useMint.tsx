@@ -73,6 +73,7 @@ function useCreateCollection(): [uploadFile, create] {
   };
 
   const saveFile: uploadFile = async (e) => {
+    console.log("uploading file");
     const data = e;
     const file = new Moralis.File(data.name, data);
     await file.saveIPFS();
