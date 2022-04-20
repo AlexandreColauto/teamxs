@@ -147,7 +147,9 @@ function Explore() {
           <option>All Collections</option>
           {customCollections &&
             customCollections.map((collection, index: any) => (
-              <option value={collection.address}>{collection.name}</option>
+              <option value={collection.address} key={index}>
+                {collection.name}
+              </option>
             ))}
           {filteredcollectionList.map((collection, i) => (
             <option key={i} value={collection.get("collectionAddress")}>

@@ -55,6 +55,7 @@ function useCreateCollection(): [uploadFile, create] {
         NFT.bytecode,
         signer
       );
+      console.log(url);
       const nft = await tokenContract.deploy(
         url + "{id}.json",
         marketAddress,

@@ -30,11 +30,10 @@ function useLoadNFTs() {
 
     if (!useraddress || !collections) return [, , loading];
 
-    const options: typeof Moralis.Web3API.account.getNFTsForContract.arguments =
-      {
-        chain: chainId,
-        address: useraddress,
-      };
+    const options: typeof Moralis.Web3API.account.getNFTs.arguments = {
+      chain: chainId,
+      address: useraddress,
+    };
     const _userNFTsCollections = await Moralis.Web3API.account.getNFTs(options);
     if (!_userNFTsCollections) return [, , loading];
     if (!_userNFTsCollections.result) return [, , loading];
