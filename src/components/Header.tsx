@@ -17,6 +17,7 @@ const Header: NextPage = () => {
     web3,
   } = useMoralis();
   const [networkMsg, setNetworkMsg] = useState(false);
+  const chainId = process.env.NEXT_PUBLIC_CHAIN_ID;
 
   useEffect(() => {
     tryWeb3();
@@ -46,7 +47,7 @@ const Header: NextPage = () => {
   async function verifyNetwork() {
     const chainIdDec = await Moralis.chainId;
     console.log(chainIdDec);
-    if (chainIdDec !== "0x38") {
+    if (chainIdDec !== chainId) {
       console.log(chainIdDec);
       setNetworkMsg(true);
     } else {
@@ -56,7 +57,7 @@ const Header: NextPage = () => {
 
   const changeNetwork = async () => {
     try {
-      await Moralis.switchNetwork("0x38");
+      await Moralis.switchNetwork(chainId);
     } catch (error: any) {
       if (error.code === 4902) {
         try {
