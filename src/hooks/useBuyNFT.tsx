@@ -18,7 +18,7 @@ const BuyNFT = () => {
 
     const { marketId, price, callback, errCallback } = props;
     try {
-      const listItem = {
+      const buyItem = {
         contractAddress: marketAddress,
         functionName: "performATransaction",
         abi: NFTMarket.abi,
@@ -27,7 +27,7 @@ const BuyNFT = () => {
         },
         msgValue: Moralis.Units.ETH(price),
       };
-      const listTransaction: any = await Moralis.executeFunction(listItem);
+      const listTransaction: any = await Moralis.executeFunction(buyItem);
       await listTransaction.wait();
 
       callback();
