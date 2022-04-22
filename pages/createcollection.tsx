@@ -31,6 +31,13 @@ const CreateCollection = () => {
   };
   const submitCollection = async () => {
     const { name, description, fee } = formInput;
+    if (!name || !description || !fee) {
+      setisError(true);
+      setTimeout(function () {
+        setisError(false);
+      }, 5000);
+      return;
+    }
     if (!isAuthenticated) authenticate();
     setProcessing(true);
     const result = await create({
