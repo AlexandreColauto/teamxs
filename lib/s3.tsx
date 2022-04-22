@@ -45,6 +45,5 @@ export const putObject = async ({ key, body, contentType }: putObject) => {
 };
 
 export const getAWS = () => {
-  console.log([process.env.AWS_BUCKET_MYAPP, process.env.AWS_REGION_MYAPP]);
   return [process.env.AWS_BUCKET_MYAPP, process.env.AWS_REGION_MYAPP];
 };
