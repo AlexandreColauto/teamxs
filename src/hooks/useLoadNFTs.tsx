@@ -25,7 +25,7 @@ function useLoadNFTs() {
     | [undefined, undefined, boolean]
   > => {
     const useraddress = Moralis.account;
-    const chainId = Moralis.chainId;
+    const chainId = process.env.NEXT_PUBLIC_CHAIN_ID;
     const [collections, addressDic, loading] = await fetch();
 
     if (!useraddress || !collections) return [, , loading];

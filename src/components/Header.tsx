@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
-const Moralis = require("moralis");
 import { useMoralis } from "react-moralis";
 import { NextPage } from "next";
 import Image from "next/image";
@@ -15,9 +14,12 @@ const Header: NextPage = () => {
     isWeb3Enabled,
     enableWeb3,
     web3,
+    chainId,
+    Moralis,
   } = useMoralis();
   const [networkMsg, setNetworkMsg] = useState(false);
-  const chainId = process.env.NEXT_PUBLIC_CHAIN_ID;
+  const [chainIdUser, setchainIdUser] = useState("");
+  const chainIdEnv = process.env.NEXT_PUBLIC_CHAIN_ID;
 
   useEffect(() => {
     tryWeb3();
@@ -26,14 +28,20 @@ const Header: NextPage = () => {
   useEffect(() => {
     const unsubscribe = Moralis.onChainChanged((chain: any) => {
       console.log(chain);
+      setchainIdUser(chain);
       verifyNetwork();
     });
-    return unsubscribe;
+    return () => {
+      unsubscribe();
+    };
   }, []);
 
-  const tryWeb3 = () => {
-    !isWeb3Enabled && isAuthenticated ? enableWeb3() : null;
+  useEffect(() => {
     verifyNetwork();
+  }, [chainId]);
+
+  const tryWeb3 = async () => {
+    !isWeb3Enabled && isAuthenticated ? enableWeb3() : null;
   };
   async function login() {
     tryWeb3();
@@ -45,10 +53,9 @@ const Header: NextPage = () => {
   }
 
   async function verifyNetwork() {
-    const chainIdDec = await Moralis.chainId;
-    console.log(chainIdDec);
-    if (chainIdDec !== chainId) {
-      console.log(chainIdDec);
+    console.log(chainId);
+    if (!chainId) return;
+    if (chainId !== chainIdEnv) {
       setNetworkMsg(true);
     } else {
       setNetworkMsg(false);
@@ -57,7 +64,8 @@ const Header: NextPage = () => {
 
   const changeNetwork = async () => {
     try {
-      await Moralis.switchNetwork(chainId);
+      if (!chainIdEnv) return;
+      await Moralis.switchNetwork(chainIdEnv);
     } catch (error: any) {
       if (error.code === 4902) {
         try {

@@ -46,9 +46,12 @@ const useFetchMarket = (): [fetchItems, filterNFTs] => {
     if (!isWeb3Enabled) return;
     const marketAddress = process.env.NEXT_PUBLIC_NFT_MARKET_ADDRESS;
     const userAddress = await Moralis.account;
+    const chainId = process.env.NEXT_PUBLIC_CHAIN_ID;
+
     if (!marketAddress || !userAddress) return;
 
     const fetchItems = {
+      chain: chainId,
       contractAddress: marketAddress,
       functionName: "fetchAllCollection",
       abi: NFTMarket.abi,
