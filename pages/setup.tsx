@@ -32,7 +32,12 @@ function Setup() {
         <br />
         <p>Get Server URL and APP ID from moralis:</p>
         <p>
-          <a target="_blank" className=" border-b" href="https://moralis.io/">
+          <a
+            target="_blank"
+            rel="noreferrer"
+            className=" border-b"
+            href="https://moralis.io/"
+          >
             Moralis
           </a>
         </p>
@@ -41,6 +46,7 @@ function Setup() {
           <a
             target="_blank"
             className=" border-b"
+            rel="noreferrer"
             href="https://objectivefs.com/howto/how-to-get-amazon-s3-keys"
           >
             Amazon keys
