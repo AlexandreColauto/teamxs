@@ -25,12 +25,36 @@ function Setup() {
         <div>Address: {address}</div>
         <br />
         <br />
-        <p>Then edit the .env.example file with the propper information </p>
-        <p> (contract address and credentials from the services),</p>
-        <p>and rename the file to just .env </p>
+        <p>
+          Then edit the .env.local.example file with the propper information{" "}
+        </p>
+        <p> Contract address and credentials from the services:</p>
+        <br />
+        <p>Get Server URL and APP ID from moralis:</p>
+        <p>
+          <a target="_blank" className=" border-b" href="https://moralis.io/">
+            Moralis
+          </a>
+        </p>
+        <p>And Get Key Id and Secret Acess key from AWS:</p>
+        <p>
+          <a
+            target="_blank"
+            className=" border-b"
+            href="https://objectivefs.com/howto/how-to-get-amazon-s3-keys"
+          >
+            Amazon keys
+          </a>
+        </p>
+        <p>and rename the file to just .env.local </p>
         <br />
         <p>This will set your environment variables.</p>
         <p>If all the information was set correctly, the webiste is ready!</p>
+
+        <p>
+          You migh have to configure the policies of your s3 bucket to allow
+          external sites to write into the database.
+        </p>
       </div>
     </div>
   );
