@@ -17,7 +17,7 @@ interface metadata {
 }
 function useLoadNFTs() {
   const Web3Api = useMoralisWeb3Api();
-  const [, fetch] = useFetchCollection();
+  const [, _fetch] = useFetchCollection();
   const { isAuthenticated, Moralis, chainId } = useMoralis();
 
   const fetchNFTs = async (): Promise<
@@ -25,8 +25,8 @@ function useLoadNFTs() {
     | [undefined, undefined, boolean]
   > => {
     const useraddress = Moralis.account;
-    const chainId = process.env.NEXT_PUBLIC_CHAIN_ID;
-    const [collections, addressDic, loading] = await fetch();
+    const chainId = Moralis.chainId;
+    const [collections, addressDic, loading] = await _fetch();
 
     if (!useraddress || !collections) return [, , loading];
 

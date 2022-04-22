@@ -18,9 +18,9 @@ contract NFT is ERC1155 , Ownable {
        creator = _owner;
     }
 
-    function mint( address  reciever ) public onlyOwner {
+    function mint( address  receiver ) public onlyOwner {
         _tokenIds.increment();
-        _mint(reciever, _tokenIds.current(), 1, "");
+        _mint(receiver, _tokenIds.current(), 1, "");
     }
 
     function burn( uint id ) public onlyOwner {
