@@ -20,7 +20,7 @@ const CreateCollection = () => {
 
   const success = () => {
     setImgUrl("");
-    updateFormInput({ name: "", description: "", fee: "" });
+    updateFormInput({ name: "", description: "", fee: "2.5" });
     setProcessing(false);
     if (!isSuccess) {
       setisSuccess(true);
