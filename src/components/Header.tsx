@@ -69,12 +69,12 @@ const Header: NextPage = () => {
     } catch (error: any) {
       if (error.code === 4902) {
         try {
-          const chainId = "0x38";
-          const chainName = "BSC Smart Chain";
-          const currencyName = "BNB";
-          const currencySymbol = "BNB";
-          const rpcUrl = "https://bsc-dataseed.binance.org/";
-          const blockExplorerUrl = "https://bscscan.com";
+          const chainId = "0x89";
+          const chainName = "Polygon Mainnet";
+          const currencyName = "MATIC";
+          const currencySymbol = "MATIC";
+          const rpcUrl = "https://polygon-rpc.com";
+          const blockExplorerUrl = "https://polygonscan.com/";
 
           await Moralis.addNetwork(
             chainId,
@@ -122,7 +122,7 @@ const Header: NextPage = () => {
                 className="button is-warning"
               >
                 <p className="title is-5">
-                  Look&apos;s like you are in a different network than BSC
+                  Look&apos;s like you are in a different network than Polygon
                   Mainnet, click here and let me change for you.🤗
                 </p>{" "}
               </button>
