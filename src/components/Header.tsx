@@ -55,10 +55,10 @@ const Header: NextPage = () => {
   async function verifyNetwork() {
     console.log(chainId);
     if (!chainId) return;
-    if (chainId !== chainIdEnv) {
-      setNetworkMsg(true);
-    } else {
+    if (chainId === chainIdEnv) {
       setNetworkMsg(false);
+    } else {
+      setNetworkMsg(true);
     }
   }
 
