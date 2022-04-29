@@ -69,11 +69,11 @@ const Header: NextPage = () => {
     } catch (error: any) {
       if (error.code === 4902) {
         try {
-          const chainId = "0x89";
-          const chainName = "Polygon Mainnet";
+          const chainId = "0x13881";
+          const chainName = "Mumbai Testnet";
           const currencyName = "MATIC";
           const currencySymbol = "MATIC";
-          const rpcUrl = "https://polygon-rpc.com";
+          const rpcUrl = "https://rpc-mumbai.maticvigil.com/";
           const blockExplorerUrl = "https://polygonscan.com/";
 
           await Moralis.addNetwork(
@@ -123,7 +123,7 @@ const Header: NextPage = () => {
               >
                 <p className="title is-5">
                   Look&apos;s like you are in a different network than Polygon
-                  Mainnet, click here and let me change for you.🤗
+                  Testnet (Mumbai), click here and let me change for you.🤗
                 </p>{" "}
               </button>
             </div>

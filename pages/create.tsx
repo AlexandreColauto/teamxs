@@ -27,7 +27,7 @@ function Create() {
       ) : (
         <div className="text-white text-xl font-bold text-center">
           <p>
-            YOU&apos;RE ON THE WRONG CHAIN, PLEASE CHANGE TO BSC MAIN NET chain
+            YOU&apos;RE ON THE WRONG CHAIN, PLEASE change to Mumbai Tesnet chain
           </p>
           <p>Your chain: {chainId}</p>
           Required chain : {process.env.NEXT_PUBLIC_CHAIN_ID}
